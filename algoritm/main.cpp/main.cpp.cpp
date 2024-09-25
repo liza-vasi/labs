@@ -19,8 +19,7 @@ void OutPutMatr(const std::vector<std::vector<int>>& matr) {
     }
 }
 void RandMas(std::vector<std::vector<int>>& matr, int n) {
-    std::srand(static_cast<unsigned int>(std::time(0))); // инициализация генератора случайных чисел
-    //matr.resize(n, std::vector<int>(n)); // инициализация матрицы
+    //std::srand(static_cast<unsigned int>(std::time(0))); 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) {
@@ -111,7 +110,7 @@ int GreedyAlgoritm(const std::vector<std::vector<int>>& matr, std::vector<int>& 
 }
 
 int main() {
-  
+    std::srand(static_cast<unsigned int>(std::time(0))); 
     setlocale(LC_ALL, "Russian");
     int n,i=0;
     for (n = 4;n <= 9;n = n + 2) {
