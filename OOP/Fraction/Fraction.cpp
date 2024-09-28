@@ -1,117 +1,112 @@
 ﻿#include "Fraction.h"
-//#include  <cmath>
-
-Fraction Fraction ::  operator+(Fraction b)
-{
+Fraction Fraction::operator+(const Fraction b) {
 	Fraction c;
-	c.SetNumerator(m_denominator * b.m_denominator + b.m_numerator * m_denominator);
-	c.SetDenomirator(m_numerator * b.m_denominator);
+	c.setDenominator(this->denominator * b.denominator);
+	c.setNumerator(this->numerator * b.denominator + this->denominator * b.numerator);
+	c.reduce();
 	return c;
 }
-
-Fraction Fraction ::  operator-(Fraction b)
-{
+Fraction Fraction::operator-(const Fraction b) {
 	Fraction c;
-	c.SetNumerator(m_denominator * b.m_denominator - b.m_numerator * m_denominator);
-	c.SetDenomirator(m_numerator * b.m_denominator);
+	c.setDenominator(this->denominator * b.denominator);
+	c.setNumerator(this->numerator * b.denominator - this->denominator * b.numerator);
+	c.reduce();
 	return c;
 }
-Fraction Fraction ::  operator*(Fraction b)
-{
+Fraction Fraction::operator*(const Fraction b) {
 	Fraction c;
-	c.SetNumerator(b.m_numerator * m_denominator);
-	c.SetDenomirator(m_numerator * b.m_denominator);
+	c.setDenominator(this->denominator * b.denominator);
+	c.setNumerator(this->numerator * b.numerator);
+	c.reduce();
 	return c;
 }
-Fraction Fraction ::  operator/(Fraction b)
-{
+Fraction Fraction::operator/(const Fraction b) {
 	Fraction c;
-	c.SetNumerator(m_numerator* b.m_denominator);
-	c.SetDenomirator(b.m_numerator * m_denominator);
+	c.setDenominator(this->denominator * b.numerator);
+	c.setNumerator(this->numerator * b.denominator);
+	c.reduce();
 	return c;
 }
-Fraction Fraction::operatorSokr() {
-	int i;
-	Fraction c;
-	if (m_denominator < m_numerator) i = m_denominator;
-	if (m_denominator >= m_numerator) i = m_numerator;
-	for (int j = 2;j <= i;j++) {
-		if (m_denominator % j && m_numerator % j) {
-			m_numerator /= j;
-			m_denominator /= j;
-		}
+Fraction Fraction::operator^(int pow) { 
+	Fraction c(1,1);
+	if (pow == 0) {
+		return c;
 	}
-	c.SetNumerator(m_numerator );
-	c.SetDenomirator( m_denominator);
-	return c;
-	/*
-	if (m_denominator < 0) {
-		m_numerator = -m_numerator;
-		m_denominator = -m_denominator;
-	}*/
+	if (pow < 0) {
+		c.setNumerator(std::pow(this->denominator, pow * -1));
+		c.setDenominator(std::pow(this->numerator, pow * -1));
+		c.reduce();
+		return c;
+	}
+	else {
+		c.setNumerator(std::pow(this->numerator, pow));
+		c.setDenominator(std::pow(this->denominator, pow));
+		c.reduce();
+		return c;
+	}
 }
 
-Fraction Fraction::operator>(Fraction b)
-{
-	b.operatorSokr();
-	operatorSokr();
-	if (m_numerator > b.m_numerator && m_denominator > b.m_denominator) {
-		return  true;
-	}
-	else return false;
+
+bool Fraction::operator<(const Fraction b) {
+	return (this->numerator * b.denominator < this->denominator * b.numerator);
+}
+bool Fraction::operator>(const Fraction b) {
+	return (this->numerator * b.denominator > this->denominator * b.numerator);
+}
+bool Fraction::operator==(const Fraction b) {
+	return (this->numerator * b.denominator == this->denominator * b.numerator);
+}
+bool Fraction::operator!=(const Fraction b) {
+	return (this->numerator * b.denominator != this->denominator * b.numerator);
 }
 
-Fraction Fraction::operator<(Fraction b)
-{
-	b.operatorSokr();
-	operatorSokr();
-	if (m_numerator < b.m_numerator && m_denominator < b.m_denominator) {
-		return  true;
+void Fraction::reduce() {
+	if (numerator == 0) { 
+		denominator = 0;
+		return;
 	}
-	else return false;
-}
-Fraction Fraction::operator==(Fraction b)
-{
-	b.operatorSokr();
-	operatorSokr();
-	if (m_numerator == b.m_numerator && m_denominator == b.m_denominator) {
-		return  true;
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
+		denominator = 1;
 	}
-	else return false;
-}
-Fraction Fraction::operator!=(Fraction b)
-{
-	b.operatorSokr();
-	operatorSokr();
-	if (m_numerator != b.m_numerator && m_denominator != b.m_denominator) {
-		return  true;
+	Fraction c;
+	int gcd = this->gcd();
+	this->setDenominator(denominator / gcd);
+	this->setNumerator(numerator / gcd);
+	if (this->getDenominator() < 0) {
+		denominator = denominator * -1;
+		numerator = numerator * -1;
 	}
-	else return false;
 }
-Fraction Fraction::pow(int stepen)  {
+
+void Fraction::outputFraction() const {
+	std::cout << this->numerator << '/' << this->denominator << "\n";
+}
+
+Fraction Fraction::inputFraction() const {
+	Fraction c;
+	std::cin >> c.numerator;
+	std::cout << "/";
+	std::cout << "\n";
+	std::cin >> c.denominator;
+	if (denominator == 0) {
+		std::cerr << "\nERROR: Entered denominator is zero;changing to 1\n";
+		c.denominator = 1;
+	}
 	
-	for (int i = 0; i < stepen; ++i) {
-		int a = m_numerator;
-		int b = m_denominator;
-		m_numerator *= a;
-		m_denominator *= b;
-	}
-	/*Fraction с;
-	c.SetNumerator(1);
-	c.SetDenomirator(1);
-	for (int i = 0; i < step; ++i) {
-		c.SetNumerator(m_numerator * c.m_numerator);
-		c.SetDenomirator(m_denominator * c.m_denominator);
-	}
-	return c;*/
-}
-/*
-Fraction Fraction ::  operator^()//stepen(?)
-{
-	Fraction c;
-	c.SetNumerator(pow(n,m_numerator));
-	c.SetDenomirator(pow( m_denominator,n));
 	return c;
-}*/
-//возведение в степень 
-//урок 141
+}
+
+double Fraction::doubleFraction() const {
+	return (double(this->numerator) / double(this->denominator));
+}
+int Fraction::gcd() {
+	int result = std::min(abs(this->denominator), abs(this->numerator));
+	while (result > 0) {
+		if (this->numerator % result == 0 && this->denominator % result == 0) {
+			break;
+		}
+		result--;
+	}
+	return result;
+}
