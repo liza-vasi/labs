@@ -17,15 +17,19 @@ int main()
 	(f1 * f2).outputFraction();
 	std::cout << "f1 / f2=";
 	(f1 / f2).outputFraction();
-	std::cout << "f1 > f2=" << ((f1 > f2) ? "True" : "False") << "\n";
-	std::cout << "f1 < f2=" << ((f1 < f2) ? "True" : "False") << "\n";
-	std::cout << "f1 == f2=" << ((f1 == f2) ? "True" : "False") << "\n";
-	std::cout << "f1 != f2=" << ((f1 != f2) ? "True" : "False") << "\n";
+	std::cout << "f1 > f2 " << ((f1 > f2) ? "True" : "False") << "\n";
+	std::cout << "f1 < f2 " << ((f1 < f2) ? "True" : "False") << "\n";
+	std::cout << "f1 == f2 " << ((f1 == f2) ? "True" : "False") << "\n";
+	std::cout << "f1 != f2 " << ((f1 != f2) ? "True" : "False") << "\n";
 
 	int pow;
-	std::cout << "Exponent to a: ";
+	std::cout << "pow  f1: ";
 	std::cin >> pow;
 	(f1 ^ pow).outputFraction();
+
+	std::cout << "pow  f2: ";
+	std::cin >> pow;
+	(f2 ^ pow).outputFraction();
 
 	std::cout << "f1 double "<<f1.doubleFraction()<<"\n";
 	std::cout << "f2 double " << f2.doubleFraction() << "\n";

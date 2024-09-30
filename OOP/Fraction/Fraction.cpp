@@ -90,7 +90,7 @@ Fraction Fraction::inputFraction() const {
 	std::cout << "\n";
 	std::cin >> c.denominator;
 	if (denominator == 0) {
-		std::cerr << "\nERROR: Entered denominator is zero;changing to 1\n";
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
 		c.denominator = 1;
 	}
 	
