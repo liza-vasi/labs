@@ -1,5 +1,17 @@
 ﻿#include "Fraction.h"
+
+int Fraction::getNumerator() const {
+	return this->numerator;
+}
+
+int Fraction::getDenominator() const {
+	return this->denominator;
+}
 Fraction Fraction::operator+(const Fraction b) {
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
+		denominator = 1;
+	}
 	Fraction c;
 	c.setDenominator(this->denominator * b.denominator);
 	c.setNumerator(this->numerator * b.denominator + this->denominator * b.numerator);
@@ -7,6 +19,10 @@ Fraction Fraction::operator+(const Fraction b) {
 	return c;
 }
 Fraction Fraction::operator-(const Fraction b) {
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
+		denominator = 1;
+	}
 	Fraction c;
 	c.setDenominator(this->denominator * b.denominator);
 	c.setNumerator(this->numerator * b.denominator - this->denominator * b.numerator);
@@ -14,6 +30,10 @@ Fraction Fraction::operator-(const Fraction b) {
 	return c;
 }
 Fraction Fraction::operator*(const Fraction b) {
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
+		denominator = 1;
+	}
 	Fraction c;
 	c.setDenominator(this->denominator * b.denominator);
 	c.setNumerator(this->numerator * b.numerator);
@@ -21,29 +41,40 @@ Fraction Fraction::operator*(const Fraction b) {
 	return c;
 }
 Fraction Fraction::operator/(const Fraction b) {
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
+		denominator = 1;
+	}
 	Fraction c;
 	c.setDenominator(this->denominator * b.numerator);
 	c.setNumerator(this->numerator * b.denominator);
 	c.reduce();
 	return c;
 }
-Fraction Fraction::operator^(int pow) { 
-	Fraction c(1,1);
+Fraction Fraction :: operator^(double pow) {
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0; changing to 1\n";
+		denominator = 1;
+	}
 	if (pow == 0) {
-		return c;
+		return Fraction(1, 1);
 	}
+
+	double base = static_cast<double>(numerator) / denominator;
+
 	if (pow < 0) {
-		c.setNumerator(std::pow(this->denominator, pow * -1));
-		c.setDenominator(std::pow(this->numerator, pow * -1));
-		c.reduce();
-		return c;
+		base = 1.0 / base; // инверсия
+		pow = -pow; 
 	}
-	else {
-		c.setNumerator(std::pow(this->numerator, pow));
-		c.setDenominator(std::pow(this->denominator, pow));
-		c.reduce();
-		return c;
-	}
+
+	// возведеним в степень и получяем корень для дробных степеней
+	double result = std::pow(base, pow);
+
+	const int precision = 10000; // точность до десяти тысяч
+	int num = static_cast<int>(result * precision);
+	Fraction c = Fraction(num, precision);
+	c.reduce();
+	return c;
 }
 
 
@@ -89,7 +120,7 @@ Fraction Fraction::inputFraction() const {
 	std::cout << "/";
 	std::cout << "\n";
 	std::cin >> c.denominator;
-	if (denominator == 0) {
+	while(denominator == 0) {
 		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
 		c.denominator = 1;
 	}

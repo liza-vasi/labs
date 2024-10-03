@@ -6,30 +6,25 @@ class Fraction
 {
 
 public:
-	Fraction(int numerator=1 , int denominator=2 ) {
+	Fraction(int numerator = 1, int denominator = 2) {
 		setNumerator(numerator);//установление
 		setDenominator(denominator);//услановление
 	}
-	
 	void setNumerator(int numerator) {
 		this->numerator = numerator;
 	}
 	void setDenominator(int denominator) {
 		this->denominator = denominator;
 	}
-	int getNumerator() {
-		return this->numerator;//получение
-	}
-	int getDenominator() {
-		return this->denominator;//получение
-	}
+	int getNumerator() const;
+	int getDenominator() const;
 
 	Fraction operator+(const Fraction b);
 	Fraction operator-(const Fraction b);
 	Fraction operator*(const Fraction b);
 	Fraction operator/(const Fraction b);
 
-	Fraction operator^(int pow);// возведение в степень
+	Fraction operator^(double pow);// возведение в степень
 
 	bool operator<(const Fraction b);
 	bool operator>(const Fraction b);

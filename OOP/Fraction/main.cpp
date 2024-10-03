@@ -22,14 +22,14 @@ int main()
 	std::cout << "f1 == f2 " << ((f1 == f2) ? "True" : "False") << "\n";
 	std::cout << "f1 != f2 " << ((f1 != f2) ? "True" : "False") << "\n";
 
-	int pow;
+	double pow1;
 	std::cout << "pow  f1: ";
-	std::cin >> pow;
-	(f1 ^ pow).outputFraction();
-
+	std::cin >> pow1;
+	(f1 ^ pow1).outputFraction();
+	double pow2;
 	std::cout << "pow  f2: ";
-	std::cin >> pow;
-	(f2 ^ pow).outputFraction();
+	std::cin >> pow2;
+	(f2 ^ pow2).outputFraction();
 
 	std::cout << "f1 double "<<f1.doubleFraction()<<"\n";
 	std::cout << "f2 double " << f2.doubleFraction() << "\n";
