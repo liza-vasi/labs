@@ -10,34 +10,27 @@ public:
 		setNumerator(numerator);//установление
 		setDenominator(denominator);//услановление
 	}
-	void setNumerator(int numerator) {
-		this->numerator = numerator;
-	}
-	void setDenominator(int denominator) {
-		this->denominator = denominator;
-	}
+	void setNumerator(int numerator);
+	void setDenominator(int denominator);
 	int getNumerator() const;
 	int getDenominator() const;
 
-	Fraction operator+(const Fraction b);
-	Fraction operator-(const Fraction b);
-	Fraction operator*(const Fraction b);
-	Fraction operator/(const Fraction b);
+	Fraction operator+(const Fraction b) const;
+	Fraction operator-(const Fraction b) const;
+	Fraction operator*(const Fraction b) const;
+	Fraction operator/(const Fraction b) const;
 
-	Fraction operator^(double pow);// возведение в степень
+	Fraction operator^(double pow) const;// возведение в степень
 
-	bool operator<(const Fraction b);
-	bool operator>(const Fraction b);
-	bool operator==(const Fraction b);
-	bool operator!=(const Fraction b);
+	bool operator<(const Fraction b) const;
+	bool operator>(const Fraction b) const;
+	bool operator==(const Fraction b) const;
+	bool operator!=(const Fraction b) const;
 
 	void reduce();//сокращение
 
-	void outputFraction() const;//вывод
-	Fraction inputFraction() const;//ввод
-
-	
-
+	void output() const;//вывод
+	void input();//ввод
 	double doubleFraction() const;
 private:
 	int numerator;

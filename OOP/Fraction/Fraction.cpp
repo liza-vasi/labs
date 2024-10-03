@@ -1,4 +1,14 @@
 ﻿#include "Fraction.h"
+void Fraction::setNumerator(int numerator) {
+	this->numerator = numerator;
+}
+void Fraction::setDenominator(int denominator) {
+	this->denominator = denominator;
+	if (denominator == 0) {
+		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
+		denominator = 1;
+	}
+}
 
 int Fraction::getNumerator() const {
 	return this->numerator;
@@ -7,55 +17,35 @@ int Fraction::getNumerator() const {
 int Fraction::getDenominator() const {
 	return this->denominator;
 }
-Fraction Fraction::operator+(const Fraction b) {
-	if (denominator == 0) {
-		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
-		denominator = 1;
-	}
+Fraction Fraction::operator+(const Fraction b) const {
 	Fraction c;
 	c.setDenominator(this->denominator * b.denominator);
 	c.setNumerator(this->numerator * b.denominator + this->denominator * b.numerator);
 	c.reduce();
 	return c;
 }
-Fraction Fraction::operator-(const Fraction b) {
-	if (denominator == 0) {
-		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
-		denominator = 1;
-	}
+Fraction Fraction::operator-(const Fraction b) const {
 	Fraction c;
 	c.setDenominator(this->denominator * b.denominator);
 	c.setNumerator(this->numerator * b.denominator - this->denominator * b.numerator);
 	c.reduce();
 	return c;
 }
-Fraction Fraction::operator*(const Fraction b) {
-	if (denominator == 0) {
-		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
-		denominator = 1;
-	}
+Fraction Fraction::operator*(const Fraction b) const {
 	Fraction c;
 	c.setDenominator(this->denominator * b.denominator);
 	c.setNumerator(this->numerator * b.numerator);
 	c.reduce();
 	return c;
 }
-Fraction Fraction::operator/(const Fraction b) {
-	if (denominator == 0) {
-		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
-		denominator = 1;
-	}
+Fraction Fraction::operator/(const Fraction b) const {
 	Fraction c;
 	c.setDenominator(this->denominator * b.numerator);
 	c.setNumerator(this->numerator * b.denominator);
 	c.reduce();
 	return c;
 }
-Fraction Fraction :: operator^(double pow) {
-	if (denominator == 0) {
-		std::cerr << "\nERROR: denominator is 0; changing to 1\n";
-		denominator = 1;
-	}
+Fraction Fraction :: operator^(double pow) const {
 	if (pow == 0) {
 		return Fraction(1, 1);
 	}
@@ -78,16 +68,16 @@ Fraction Fraction :: operator^(double pow) {
 }
 
 
-bool Fraction::operator<(const Fraction b) {
+bool Fraction::operator<(const Fraction b) const {
 	return (this->numerator * b.denominator < this->denominator * b.numerator);
 }
-bool Fraction::operator>(const Fraction b) {
+bool Fraction::operator>(const Fraction b) const {
 	return (this->numerator * b.denominator > this->denominator * b.numerator);
 }
-bool Fraction::operator==(const Fraction b) {
+bool Fraction::operator==(const Fraction b) const {
 	return (this->numerator * b.denominator == this->denominator * b.numerator);
 }
-bool Fraction::operator!=(const Fraction b) {
+bool Fraction::operator!=(const Fraction b) const {
 	return (this->numerator * b.denominator != this->denominator * b.numerator);
 }
 
@@ -110,22 +100,19 @@ void Fraction::reduce() {
 	}
 }
 
-void Fraction::outputFraction() const {
+void Fraction::output() const {
 	std::cout << this->numerator << '/' << this->denominator << "\n";
 }
 
-Fraction Fraction::inputFraction() const {
-	Fraction c;
-	std::cin >> c.numerator;
+void Fraction::input() {
+	std::cin >> numerator;
 	std::cout << "/";
 	std::cout << "\n";
-	std::cin >> c.denominator;
+	std::cin >> denominator;
 	while(denominator == 0) {
 		std::cerr << "\nERROR: denominator is 0;changing to 1\n";
-		c.denominator = 1;
+		denominator = 1;
 	}
-	
-	return c;
 }
 
 double Fraction::doubleFraction() const {
