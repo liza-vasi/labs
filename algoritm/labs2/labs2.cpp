@@ -2,57 +2,54 @@
 #include <string>
 #include <vector>
 #include <conio.h>
-//  получения индексов всех вхождений подстроки в заданном диапазоне
-std::vector<int> BM(const std::string& line, const std::string& image, int start, int end, int number) {
-    std::vector<int> indices; // вектор для хранения индексов вхождений
-    int Size_i = image.length();
+std::vector<int> BM(const std::string& text, const std::string& image, int start, int end, bool firstOrAll) {
+    std::vector<int> indices; 
+    int imageSize = image.length();
 
-    // проверка на корректность входных параметров
-    if (start < 0 || end >= line.length() || start > end || Size_i == 0) {
-        return indices; // возвращаем пустой вектор 
+    if (start < 0 || end >= text.length() || start > end || imageSize == 0) {
+        return indices; 
     }
 
-    std::vector<int> TAB(256, Size_i); // инициализируем таблицу
+    std::vector<int> shiftTable(256, imageSize); 
 
-    for (int i = 0; i < Size_i - 1; i++) {
-        TAB[image[i]] = Size_i - 1 - i; // заполняем таблицу
+    for (int i = 0; i < imageSize - 1; i++) {
+        shiftTable[image[i]] = imageSize - 1 - i; 
     }
-    for (int i = start; i <= end - Size_i + 1;) {
-        int j = Size_i - 1;
+    for (int i = start; i <= end - imageSize + 1;) {
+        int j = imageSize - 1;
 
-        while (j >= 0 && line[i + j] == image[j]) {
+        while (j >= 0 && text[i + j] == image[j]) {
             j--;
         }
 
-        if (j < 0) { // если образ найден
-            indices.push_back(i); // сохраняем индекс вхождения
-            if (number == 1) {
-                return indices;
+        if (j < 0) { 
+            indices.push_back(i); 
+            if (firstOrAll) {
                 break;
             }
-            i += Size_i; // смещаем на длину образа для поиска следующих вхождений
+            i += imageSize; 
         }
         else {
-            int charValue = line[i + j];
-            int shift = (charValue < 256) ? TAB[charValue] : Size_i;
-            i += std::max(1, j - shift); // смещение
+            //char charValue = text[i + j];
+            int shift = shiftTable[text[i + j]];
 
+            i += std::max(1, j - shift); 
         }
     }
 
-    return indices; // возвращаем вектор с индексами всех вхождений
+    return indices; 
 }
+
 
 int main() {
     setlocale(LC_ALL, "Russian");
-    std::string line, image;
+    std::string text, image;
     std::cout << "Введите строку: ";
-    std::getline(std::cin, line);
+    std::getline(std::cin, text);
     std::cout << "Введите образ: ";
     std::getline(std::cin, image);
-    // поиск первого вхождения
-    int Size_l = line.length();
-    std::vector<int> index = BM(line, image, 0, Size_l-1, 1);
+    int textSize = text.length();
+    std::vector<int> index = BM(text, image, 0, textSize -1, 1);
     
     std::cout << "Индекс первого вхождения: ";
     for (int x : index) {
@@ -60,14 +57,13 @@ int main() {
     }
     std::cout << "\n";
 
-    // поиск всех вхождений в заданном диапазоне
     int start;
     int end;
 
     std::cout << "Диапазон вхождений: ";
     std::cin >> start;
     std::cin >> end;
-    std::vector<int> occurrences = BM(line, image, start, end,-1);
+    std::vector<int> occurrences = BM(text, image, start, end,0);
     std::cout << "Индексы всех вхождений: ";
     for (int x : occurrences) {
         std::cout << x << " ";
