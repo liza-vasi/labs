@@ -19,8 +19,6 @@ Array::~Array()
 {
 	delete[] m_array;
 }
-// создаем новый массив, который по размеру такой же как other, освобождаем память под него
-//потом копируем каждый элемент из other в новый массив
 Array::Array(const Array& other)
 {
 	m_size = other.m_size;
@@ -30,14 +28,12 @@ Array::Array(const Array& other)
 		m_array[i] = other.m_array[i];
 	}
 }
-//пока не очень понятно как отличить от предыдущего
+
 Array::Array(Array&& other) noexcept
 {
-	// Инициализируем члены класса
 	m_size = other.m_size;
 	m_array = other.m_array;
 
-	// Обнуляем размер и указатель в исходном объекте
 	other.m_size = 0;
 	other.m_array = nullptr;
 }
@@ -195,7 +191,7 @@ void Array::bubleSort() {
 }
 
 bool Array::deleteByIndex(int index) {
-	if (index >= m_size)
+	if (index >= m_size || index < 0)
 	{
 		return false;
 	}
@@ -227,26 +223,27 @@ void Array::deleteAll(int value) {
 	}
 }
 
-int Array:: max() const {
-	if (m_size == 0)
-	{
-		return -1;
+int Array::max() const {
+	if (m_size == 0) {
+		return -1; 
 	}
-	int max = 0;
-	for (int i = 0; i < m_size;i++) {
-		if (m_array[i]>max) {
-			max= m_array[i];
+
+	int max = m_array[0];
+	for (int i = 1; i < m_size; i++) { 
+		if (m_array[i] > max) {
+			max = m_array[i];
 		}
 	}
 	return max;
 }
+
 int Array::min() const {
-	if (m_size == 0)
-	{
-		return -1;
+	if (m_size == 0) {
+		return -1; 
 	}
-	int min = 1000000;
-	for (int i = 0; i < m_size;i++) {
+
+	int min = m_array[0]; 
+	for (int i = 1; i < m_size; i++) {
 		if (m_array[i] < min) {
 			min = m_array[i];
 		}
@@ -280,7 +277,7 @@ void Array::deleteByIterator(int* iterator) {
 
 void Array:: deleteInterval(int* begin, int* end) {
 	if (begin == nullptr || end == nullptr || begin > end) {
-		std::cout<<"Ошибка";
+		exit;
 	}
 	int startIndex = begin - m_array;
 	int endIndex = end - m_array;
@@ -289,3 +286,8 @@ void Array:: deleteInterval(int* begin, int* end) {
 		deleteByIndex(i);
 	}
 }
+
+
+void Array::addInEnd(int value) {
+	insert(m_size, value);
+} 

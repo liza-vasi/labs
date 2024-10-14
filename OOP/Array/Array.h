@@ -9,20 +9,9 @@ public:
     bool insert(const int index, const int& value);//вставка ++
     void swap(Array& other) noexcept;//функция свап  ++
 
-    Array& operator=(const Array& other);//копирование ++
-    Array& operator=(Array&& other) noexcept;//перемещение
-    int& operator[](int index);//изменяемая ссылка, доступ к индексу
-    const int& operator[](int index) const;//неизменяемая поэтому const, тоже доступ к индексу
-    Array operator+(const Array& other) const;//сложение массивов
-    Array& operator+=(const Array& other);//сложение с присваиванием
-
-
     int getSize() const;//получение размера ++
     void input();//ввод ++
     void output() const;//вывод ++
-
-    bool operator!=(const Array& other) const;//сравнение ++
-    bool operator==(const Array& other) const;//сравнение  ++
 
     int find(int value) const;//поиск   ++
 
@@ -40,9 +29,22 @@ public:
     int* end();//итератор конца
     const int* end() const;//неизменяемый итератор конц
 
+    void addInEnd(int value);
+
     void insertBefore(int* iterator, int value);//вставка перед итератором ++
     void deleteByIterator(int* iterator);//удаление по итератору++
     void deleteInterval(int* begin, int* end);//удаление интервала ++
+
+
+    bool operator!=(const Array& other) const;//сравнение ++
+    bool operator==(const Array& other) const;//сравнение  ++
+
+    Array& operator=(const Array& other);//копирование ++
+    Array& operator=(Array&& other) noexcept;//перемещение
+    int& operator[](int index);//изменяемая ссылка, доступ к индексу
+    const int& operator[](int index) const;//неизменяемая поэтому const, тоже доступ к индексу
+    Array operator+(const Array& other) const;//сложение массивов
+    Array& operator+=(const Array& other);//сложение с присваиванием
 
 private:
     int* m_array = nullptr;//указатель на массив 
