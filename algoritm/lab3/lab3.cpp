@@ -22,9 +22,11 @@ void shellSort(std::vector<int>& arr, int gap) {
 void shellSortWithHibbardGaps(std::vector<int>& arr) {
     int n = arr.size();
     std::vector<int> gaps;
-    for (int m = 1; (1 << m) - 1 < n; m++) {
-        gaps.push_back((1 << m) - 1); // 2^m - 1
+    
+    for (int m = 1; pow(2, m) - 1 < n; m++) {
+        gaps.push_back(pow(2, m) - 1); // 2^m - 1
     }
+
     for (int i = gaps.size() - 1; i >= 0; i--) {
         shellSort(arr, gaps[i]);
     }
