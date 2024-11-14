@@ -10,6 +10,7 @@ public:
     using Cell = unsigned char;
     static const int CellSize = 8; // sizeof(Cell) * 8
     BoolVector(int length = CellSize);// Конструктор по умолчанию
+    BoolVector(int length, bool value);
     BoolVector(const BoolVector& other);// Конструктор копирования
     ~BoolVector();// Деструктор
     int length() const;// Получение длины вектора
@@ -52,8 +53,8 @@ public:
     // Побитовые сдвиги (<<, >>, <<=, >>=)
     BoolVector operator<<=(int count) const;
     BoolVector operator>>=(int count) const;
-    BoolVector& operator<<=(int count);
-    BoolVector& operator>>=(int count);
+    BoolVector& operator<<(int count);
+    BoolVector& operator>>(int count);
 
     // Побитовая инверсия (~)
     BoolVector operator~() const;

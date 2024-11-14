@@ -14,7 +14,17 @@ BoolVector::BoolVector(int length)
 
 	m_cells = new Cell[m_cellCount];
 }
+BoolVector::BoolVector(int length, bool value) : m_length(length) {
+    m_cellCount = (length + CellSize - 1) / CellSize; 
+    m_cells = new Cell[m_cellCount](); 
 
+    if (value) {
+        setAll(true); 
+    }
+    else {
+        setAll(false); 
+    }
+}
 BoolVector::BoolVector(const BoolVector& other)
 {
 	m_cellCount = other.m_cellCount;
@@ -294,12 +304,12 @@ BoolVector BoolVector::operator>>=(int count) const {
     return that;
 }
 
-BoolVector& BoolVector::operator<<=(int count) {
+BoolVector& BoolVector::operator<<(int count) {
     *this = operator<<=(count); 
     return *this;
 }
 
-BoolVector& BoolVector::operator>>=(int count) {
+BoolVector& BoolVector::operator>>(int count) {
     *this = operator>>=(count); 
     return *this;
 }

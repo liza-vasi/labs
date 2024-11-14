@@ -21,7 +21,7 @@ int main() {
 
     BoolVector bv2(16);
     bv2.setAll(true);
-    std::cout << "Второй BoolVector (все биты установлены в true): " << bv2 << std::endl;
+    std::cout << "Второй BoolVector : " << bv2 << std::endl;
 
     BoolVector andResult = bv & bv2;
     std::cout << "Результат операции AND: " << andResult << std::endl;
