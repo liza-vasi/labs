@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include "Array.h"
-
+#include <stdexcept>
 Array::Array(int size)
 {
 	if (size < 0)
@@ -225,7 +225,7 @@ void Array::deleteAll(int value) {
 
 int Array::max() const {
 	if (m_size == 0) {
-		return -1; 
+		throw std::runtime_error("Массиы пустой");
 	}
 
 	int max = m_array[0];
@@ -239,7 +239,7 @@ int Array::max() const {
 
 int Array::min() const {
 	if (m_size == 0) {
-		return -1; 
+		throw std::runtime_error("Массив пустой");
 	}
 
 	int min = m_array[0]; 
@@ -275,9 +275,9 @@ void Array::deleteByIterator(int* iterator) {
 	deleteByIndex(index);
 }
 
-void Array:: deleteInterval(int* begin, int* end) {
+bool Array:: deleteInterval(int* begin, int* end) {
 	if (begin == nullptr || end == nullptr || begin > end) {
-		exit;
+		return false;
 	}
 	int startIndex = begin - m_array;
 	int endIndex = end - m_array;

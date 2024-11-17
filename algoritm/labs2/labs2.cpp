@@ -27,12 +27,11 @@ std::vector<int> BM(const std::string& text, const std::string& image, int start
             if (firstOrAll) {
                 break;
             }
-            i += imageSize; 
+            i += 1; 
         }
         else {
             //char charValue = text[i + j];
             int shift = shiftTable[text[i + j]];
-
             i += std::max(1, j - shift); 
         }
     }

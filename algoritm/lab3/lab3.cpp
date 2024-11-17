@@ -146,6 +146,8 @@ int main() {
             int timeSedgwick = (end_time3 - start_time3) ; // в миллисекундах
             std::cout << "Время работы Седвик (в миллисекундах): " << timeSedgwick << "\n";
 
+            int averageTime = (timeHibbard + timeKnuth + timeKnuth)/3;
+            std::cout << "Среднее время работы (в миллисекундах): " << averageTime << "\n";
             
             std::cout << '\n';
         }

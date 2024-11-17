@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <stdexcept>
 #include <cstring>
 
@@ -9,64 +9,63 @@ public:
 public:
     using Cell = unsigned char;
     static const int CellSize = 8; // sizeof(Cell) * 8
-    BoolVector(int length = CellSize);// Конструктор по умолчанию
+    BoolVector(int length = CellSize);// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     BoolVector(int length, bool value);
-    BoolVector(const BoolVector& other);// Конструктор копирования
-    ~BoolVector();// Деструктор
-    int length() const;// Получение длины вектора
-    void swap(BoolVector& other);// Обмен содержимым с другим вектором
-    bool bitValue(int index) const;// Получение значения бита по индексу
-    void setBitValue(int index, bool value);// Установка значения бита по индексу
-    BoolVector& operator=(const BoolVector& other);// Перегрузка оператора присваивания
-    Rank operator[](int index);// Перегрузка оператора доступа к компонентам
-    // Потоковый ввод-вывод
+    BoolVector(const BoolVector& other);// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
+    ~BoolVector();// Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
+    int length() const;// РџРѕР»СѓС‡РµРЅРёРµ РґР»РёРЅС‹ РІРµРєС‚РѕСЂР°
+    void swap(BoolVector& other);// РћР±РјРµРЅ СЃРѕРґРµСЂР¶РёРјС‹Рј СЃ РґСЂСѓРіРёРј РІРµРєС‚РѕСЂРѕРј
+    bool bitValue(int index) const;// РџРѕР»СѓС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ Р±РёС‚Р° РїРѕ РёРЅРґРµРєСЃСѓ
+    void setBitValue(int index, bool value);// РЈСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёСЏ Р±РёС‚Р° РїРѕ РёРЅРґРµРєСЃСѓ
+    BoolVector& operator=(const BoolVector& other);// РџРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РїСЂРёСЃРІР°РёРІР°РЅРёСЏ
+    Rank operator[](int index);// РџРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РґРѕСЃС‚СѓРїР° Рє РєРѕРјРїРѕРЅРµРЅС‚Р°Рј
+    // РџРѕС‚РѕРєРѕРІС‹Р№ РІРІРѕРґ-РІС‹РІРѕРґ
     friend std::ostream& operator<<(std::ostream& os, const BoolVector& bv);
     friend std::istream& operator>>(std::istream& is, BoolVector& bv);
 
-    // Инверсия i-ой компоненты
+    // РРЅРІРµСЂСЃРёСЏ i-РѕР№ РєРѕРјРїРѕРЅРµРЅС‚С‹
     void invertBit(int index);
 
-    // Установка в 0/1 i-ой компоненты
+    // РЈСЃС‚Р°РЅРѕРІРєР° РІ 0/1 i-РѕР№ РєРѕРјРїРѕРЅРµРЅС‚С‹
     void setBit(int index, bool value);
 
-    // Установка в 0/1 k компонент, начиная с i-ой
+    // РЈСЃС‚Р°РЅРѕРІРєР° РІ 0/1 k РєРѕРјРїРѕРЅРµРЅС‚, РЅР°С‡РёРЅР°СЏ СЃ i-РѕР№
     void setBits(int index, int count, bool value);
 
-    // Установка в 0/1 всех компонент вектора
+    // РЈСЃС‚Р°РЅРѕРІРєР° РІ 0/1 РІСЃРµС… РєРѕРјРїРѕРЅРµРЅС‚ РІРµРєС‚РѕСЂР°
     void setAll(bool value);
 
-    // Вес вектора (количество единиц)
+    // Р’РµСЃ РІРµРєС‚РѕСЂР° (РєРѕР»РёС‡РµСЃС‚РІРѕ РµРґРёРЅРёС†)
     int weight() const;
 
-    // Побитовое умножение (&, &=)
+    // РџРѕР±РёС‚РѕРІРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ (&, &=)
     BoolVector operator&(const BoolVector& other) const;
     BoolVector& operator&=(const BoolVector& other);
 
-    // Побитовое сложение (|, |=)
+    // РџРѕР±РёС‚РѕРІРѕРµ СЃР»РѕР¶РµРЅРёРµ (|, |=)
     BoolVector operator|(const BoolVector& other) const;
     BoolVector& operator|=(const BoolVector& other);
 
-    // Побитовое исключающее ИЛИ (^, ^=)
+    // РџРѕР±РёС‚РѕРІРѕРµ РёСЃРєР»СЋС‡Р°СЋС‰РµРµ РР›Р (^, ^=)
     BoolVector operator^(const BoolVector& other) const;
     BoolVector& operator^=(const BoolVector& other);
 
-    // Побитовые сдвиги (<<, >>, <<=, >>=)
-    BoolVector operator<<=(int count) const;
-    BoolVector operator>>=(int count) const;
-    BoolVector& operator<<(int count);
-    BoolVector& operator>>(int count);
-
-    // Побитовая инверсия (~)
+    // РџРѕР±РёС‚РѕРІС‹Рµ СЃРґРІРёРіРё (<<, >>, <<=, >>=)
+    BoolVector operator<<(int count) ;
+    BoolVector operator>>(int count) ;
+    BoolVector& operator>>=(int count);
+    BoolVector& operator<<=(int count);
+    // РџРѕР±РёС‚РѕРІР°СЏ РёРЅРІРµСЂСЃРёСЏ (~)
     BoolVector operator~() const;
 private:
-    // Вспомогательные методы
+    // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹
     int _excessRankCount() const;
     static Cell _mask(int index);
 
 private:
-    Cell* m_cells = nullptr;// Массив ячеек
-    int m_cellCount = 0;// Количество ячеек
-    int m_length = 0;// Количество бит
+    Cell* m_cells = nullptr;// РњР°СЃСЃРёРІ СЏС‡РµРµРє
+    int m_cellCount = 0;// РљРѕР»РёС‡РµСЃС‚РІРѕ СЏС‡РµРµРє
+    int m_length = 0;// РљРѕР»РёС‡РµСЃС‚РІРѕ Р±РёС‚
 };
 
 

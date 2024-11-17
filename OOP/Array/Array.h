@@ -1,4 +1,9 @@
 #pragma once
+#include <iostream>
+#include <stdexcept>
+#include <algorithm>
+
+template <typename T>
 class Array {
 public:
     Array(int size = 10);
@@ -33,7 +38,7 @@ public:
 
     void insertBefore(int* iterator, int value);//вставка перед итератором ++
     void deleteByIterator(int* iterator);//удаление по итератору++
-    void deleteInterval(int* begin, int* end);//удаление интервала ++
+    bool deleteInterval(int* begin, int* end);//удаление интервала ++
 
 
     bool operator!=(const Array& other) const;//сравнение ++

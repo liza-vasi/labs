@@ -74,9 +74,23 @@ void BoolVector::setBitValue(int index, bool value)
 	}
 }
 
-BoolVector& BoolVector::operator=(const BoolVector& other)
-{
-	return *this;
+BoolVector& BoolVector::operator=(const BoolVector& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    delete[] m_cells;
+
+    m_length = other.m_length;
+    m_cellCount = other.m_cellCount;
+
+    m_cells = new Cell[m_cellCount];
+
+    for (int i = 0; i < m_cellCount; ++i) {
+        m_cells[i] = other.m_cells[i];
+    }
+
+    return *this;
 }
 
 BoolVector::Rank BoolVector::operator[](int index)
@@ -255,9 +269,9 @@ BoolVector& BoolVector::operator^=(const BoolVector& other) {
 }
 
 // Побитовые сдвиги (<<)
-BoolVector BoolVector::operator<<=(int count) const {
+BoolVector BoolVector::operator<<(int count) {
     if (count < 0) {
-        return operator>>=(-count);
+        return operator>>(-count);
     }
     else if (count >= m_length) {
         BoolVector result(m_length);
@@ -281,9 +295,9 @@ BoolVector BoolVector::operator<<=(int count) const {
 
 
 
-BoolVector BoolVector::operator>>=(int count) const {
+BoolVector BoolVector::operator>>(int count) {
     if (count < 0) {
-        return operator<<=(-count);
+        return operator<<(-count);
     }
     else if (count >= m_length) {
         return BoolVector(m_length); 
@@ -304,12 +318,12 @@ BoolVector BoolVector::operator>>=(int count) const {
     return that;
 }
 
-BoolVector& BoolVector::operator<<(int count) {
+BoolVector& BoolVector::operator<<=(int count) {
     *this = operator<<=(count); 
     return *this;
 }
 
-BoolVector& BoolVector::operator>>(int count) {
+BoolVector& BoolVector::operator>>=(int count) {
     *this = operator>>=(count); 
     return *this;
 }
