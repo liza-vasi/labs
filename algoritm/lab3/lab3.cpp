@@ -88,6 +88,20 @@ std::vector<int> generateRandomArray(int size, int minValue, int maxValue) {
     return arr;
 }
 
+void saveArrayToFile(const std::vector<int>& arr, const std::string& filename) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        for (int num : arr) {
+            file << num << "\n";
+        }
+        file.close();
+    }
+    else {
+        std::cerr << "Не удалось открыть файл для записи: " << filename << "\n";
+    }
+}
+
+
 void writeArrayToFile(const std::vector<int>& arr, const std::string& filename) {
     std::ofstream outFile(filename);
     for (int i = 0; i < arr.size(); i++) {
@@ -102,47 +116,41 @@ int main() {
     const std::vector<int> sizes = { 10000, 100000, 1000000 };
     const std::vector<std::pair<int, int>> ranges = { {-10, 10}, {-1000, 1000}, {-100000, 100000} };
 
-    
-    for (int i = 0; i < sizes.size(); i++) {
+    for (int i = 0; i < sizes.size(); ++i) {
         int size = sizes[i];
-        for (int j = 0; j < ranges.size(); j++) {
-            std::pair<int, int> range = ranges[j];
-            std::vector<int> arr = generateRandomArray(size, range.first, range.second);
-            std::string filename = "array_" + std::to_string(size) + "_" + std::to_string(range.first) + "_" + std::to_string(range.second) + ".txt";
-            writeArrayToFile(arr,filename);
-        }
-    }
-
-    
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        int size = sizes[i];
-        for (size_t j = 0; j < ranges.size(); ++j) {
+        for (int j = 0; j < ranges.size(); ++j) {
             std::pair<int, int> range = ranges[j];
             std::vector<int> arrHibbard = generateRandomArray(size, range.first, range.second);
-            std::vector<int> arrKnuth = arrHibbard; 
+            std::vector<int> arrKnuth = arrHibbard;
             std::vector<int> arrSedgwick = arrHibbard;
-            
+
+            // Сохраняем исходные массивы в файл
+            std::string filename = "исходный_массив_" + std::to_string(size) + "_" + std::to_string(range.first) + "_" + std::to_string(range.second) + ".txt";
+            saveArrayToFile(arrHibbard, filename);
+
             unsigned int start_time1 = clock(); // начальное время
             shellSortWithHibbardGaps(arrHibbard);
             unsigned int end_time1 = clock(); // конечное время
-            unsigned int timeHibbard = end_time1 - start_time1;
-            std::cout << "Время работы Хиббард (в миллисекундах) " << timeHibbard << "\n";
+            int timeHibbard = (end_time1 - start_time1) ; // в миллисекундах
+            std::cout << "Время работы Хиббард (в миллисекундах): " << timeHibbard << "\n";
 
             unsigned int start_time2 = clock(); // начальное время
             shellSortWithKnuthGaps(arrKnuth);
             unsigned int end_time2 = clock(); // конечное время
-            unsigned int timeKnuth = end_time2 - start_time2;
-            std::cout << "Время работы Кнут (в миллисекундах) " << timeKnuth << "\n";
+            int timeKnuth = (end_time2 - start_time2) ; 
+            std::cout << "Время работы Кнут (в миллисекундах): " << timeKnuth << "\n";
 
             unsigned int start_time3 = clock(); // начальное время
             shellSortWithSedgwickGaps(arrSedgwick);
             unsigned int end_time3 = clock(); // конечное время
-            unsigned int timeSedgwick = end_time3 - start_time3;
-            std::cout << "Время работы Седвик (в миллисекундах) " << timeSedgwick << "\n";
-            
+            int timeSedgwick = (end_time3 - start_time3) ; // в миллисекундах
+            std::cout << "Время работы Седвик (в миллисекундах): " << timeSedgwick << "\n";
 
+            
+            std::cout << '\n';
         }
     }
+
     _getch();
     return 0;
 }
