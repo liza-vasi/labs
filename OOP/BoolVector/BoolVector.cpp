@@ -93,6 +93,18 @@ BoolVector& BoolVector::operator=(const BoolVector& other) {
     return *this;
 }
 
+
+void BoolVector::invert() {
+    for (int i = 0; i < m_cellCount; ++i) {
+        m_cells[i] ^= ~0; 
+    }
+}
+
+BoolVector::Rank BoolVector::operator[](int index) const {
+    assert(index >= 0 && index < m_length); 
+    return Rank(&m_cells[index / CellSize], _mask(index)); 
+}
+
 BoolVector::Rank BoolVector::operator[](int index)
 {
 	assert(index >= 0 && index < m_length);
@@ -119,23 +131,20 @@ BoolVector::Rank::Rank(Cell* cell, Cell mask)
 	assert(m_mask > 0);
 }
 
-BoolVector::Rank& BoolVector::Rank::operator=(const Rank& other)
-{
-	return operator=(static_cast<bool>(other));
+BoolVector::Rank& BoolVector::Rank::operator=(const Rank& other) {
+    return operator=(static_cast<bool>(other)); 
 }
 
-BoolVector::Rank& BoolVector::Rank::operator=(bool value)
-{
-	if (value)
-	{
-		*m_cell |= m_mask;
-	}
-	else
-	{
-		*m_cell &= ~m_mask;
-	}
-	return *this;
+BoolVector::Rank& BoolVector::Rank::operator=(bool value) {
+    if (value) {
+        *m_cell |= m_mask;
+    }
+    else {
+        *m_cell &= ~m_mask;
+    }
+    return *this;
 }
+
 
 BoolVector::Rank::operator bool() const
 {
@@ -319,12 +328,53 @@ BoolVector BoolVector::operator>>(int count) {
 }
 
 BoolVector& BoolVector::operator<<=(int count) {
-    *this = operator<<=(count); 
+    if (count <= 0) {
+        return *this; // Ничего не делаем, если count меньше или равен 0
+    }
+
+    int cellShift = count / (sizeof(Cell) * 8); 
+    int bitShift = count % (sizeof(Cell) * 8); 
+
+    for (int i = m_cellCount - 1; i >= cellShift; --i) {
+        m_cells[i] = m_cells[i - cellShift]; 
+    }
+
+    for (int i = 0; i < cellShift; ++i) {
+        m_cells[i] = 0;
+    }
+
+    if (bitShift > 0) {
+        for (int i = m_cellCount - 1; i > 0; --i) {
+            m_cells[i] = (m_cells[i] << bitShift) | (m_cells[i - 1] >> (sizeof(Cell) * 8 - bitShift));
+        }
+        m_cells[0] <<= bitShift;
+    }
+
     return *this;
 }
 
 BoolVector& BoolVector::operator>>=(int count) {
-    *this = operator>>=(count); 
+    if (count <= 0) {
+        return *this; // Ничего не делаем, если count меньше или равен 0
+    }
+    int cellShift = count / (sizeof(Cell) * 8);
+    int bitShift = count % (sizeof(Cell) * 8); 
+
+    for (int i = 0; i < m_cellCount - cellShift; ++i) {
+        m_cells[i] = m_cells[i + cellShift]; 
+    }
+
+    for (int i = m_cellCount - cellShift; i < m_cellCount; ++i) {
+        m_cells[i] = 0;
+    }
+
+    if (bitShift > 0) {
+        for (int i = 0; i < m_cellCount - 1; ++i) {
+            m_cells[i] = (m_cells[i] >> bitShift) | (m_cells[i + 1] << (sizeof(Cell) * 8 - bitShift));
+        }
+        m_cells[m_cellCount - 1] >>= bitShift; 
+    }
+
     return *this;
 }
 

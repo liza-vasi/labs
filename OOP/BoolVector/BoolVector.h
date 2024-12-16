@@ -18,7 +18,9 @@ public:
     bool bitValue(int index) const;// Получение значения бита по индексу
     void setBitValue(int index, bool value);// Установка значения бита по индексу
     BoolVector& operator=(const BoolVector& other);// Перегрузка оператора присваивания
-    Rank operator[](int index);// Перегрузка оператора доступа к компонентам
+    Rank operator[](int index);
+    Rank operator[](int index) const;
+    void invert();// Перегрузка оператора доступа к компонентам
     // Потоковый ввод-вывод
     friend std::ostream& operator<<(std::ostream& os, const BoolVector& bv);
     friend std::istream& operator>>(std::istream& is, BoolVector& bv);
