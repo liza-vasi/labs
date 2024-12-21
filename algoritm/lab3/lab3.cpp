@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 #include <conio.h>
+#include <numeric>
+#include <algorithm>
 #include <cmath>
 
 void shellSort(std::vector<int>& arr, int gap) {
@@ -22,15 +24,18 @@ void shellSort(std::vector<int>& arr, int gap) {
 void shellSortWithHibbardGaps(std::vector<int>& arr) {
     int n = arr.size();
     std::vector<int> gaps;
-    
-    for (int m = 1; pow(2, m) - 1 < n; m++) {
-        gaps.push_back(pow(2, m) - 1); // 2^m - 1
+
+    for (int m = 1; ; m++) {
+        int gap = pow(2, m) - 1; 
+        if (gap >= n) break;
+        gaps.push_back(gap);
     }
 
     for (int i = gaps.size() - 1; i >= 0; i--) {
         shellSort(arr, gaps[i]);
     }
 }
+
 
 void shellSortWithKnuthGaps(std::vector<int>& arr) {
     int n = arr.size();
@@ -50,7 +55,7 @@ void shellSortWithSedgwickGaps(std::vector<int>& arr) {
         int gap;
 
         if (m % 2 == 0) {
-            gap = 9 * (1 * pow(2, m / 2)) - 9; 
+            gap = 9 * (1 * pow(2, m / 2)) - 9;
         }
         else {
             gap = 8 * (1 * pow(2, (m + 1) / 2)) - 6;
@@ -62,6 +67,7 @@ void shellSortWithSedgwickGaps(std::vector<int>& arr) {
     for (int i = gaps.size() - 1; i >= 0; i--) {
         shellSort(arr, gaps[i]);
     }
+
 }
 
 bool isSorted(const std::vector<int>& arr) {
@@ -110,6 +116,24 @@ void writeArrayToFile(const std::vector<int>& arr, const std::string& filename) 
 }
 
 
+std::vector<int> readArrayFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<int> arr;
+    int value;
+
+    if (file.is_open()) {
+        while (file >> value) {
+            arr.push_back(value);
+        }
+        file.close();
+    }
+    else {
+        std::cerr << "Не удалось открыть файл: " << filename << std::endl;
+    }
+
+    return arr;
+}
+
 
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -127,31 +151,62 @@ int main() {
             // Сохраняем исходные массивы в файл
             std::string filename = "исходный_массив_" + std::to_string(size) + "_" + std::to_string(range.first) + "_" + std::to_string(range.second) + ".txt";
             saveArrayToFile(arrHibbard, filename);
-
-            unsigned int start_time1 = clock(); // начальное время
-            shellSortWithHibbardGaps(arrHibbard);
-            unsigned int end_time1 = clock(); // конечное время
-            int timeHibbard = (end_time1 - start_time1) ; // в миллисекундах
-            std::cout << "Время работы Хиббард (в миллисекундах): " << timeHibbard << "\n";
-
-            unsigned int start_time2 = clock(); // начальное время
-            shellSortWithKnuthGaps(arrKnuth);
-            unsigned int end_time2 = clock(); // конечное время
-            int timeKnuth = (end_time2 - start_time2) ; 
-            std::cout << "Время работы Кнут (в миллисекундах): " << timeKnuth << "\n";
-
-            unsigned int start_time3 = clock(); // начальное время
-            shellSortWithSedgwickGaps(arrSedgwick);
-            unsigned int end_time3 = clock(); // конечное время
-            int timeSedgwick = (end_time3 - start_time3) ; // в миллисекундах
-            std::cout << "Время работы Седвик (в миллисекундах): " << timeSedgwick << "\n";
-
-            int averageTime = (timeHibbard + timeKnuth + timeKnuth)/3;
-            std::cout << "Среднее время работы (в миллисекундах): " << averageTime << "\n";
-            
-            std::cout << '\n';
         }
     }
+            
+                const std::vector<std::string> filenames = {
+                    "исходный_массив_10000_-10_10.txt",
+                    "исходный_массив_10000_-1000_1000.txt",
+                    "исходный_массив_10000_-100000_100000.txt",
+                    "исходный_массив_100000_-10_10.txt",
+                    "исходный_массив_100000_-1000_1000.txt",
+                    "исходный_массив_100000_-100000_100000.txt",
+                    "исходный_массив_1000000_-10_10.txt",
+                    "исходный_массив_1000000_-1000_1000.txt",
+                    "исходный_массив_1000000_-100000_100000.txt"
+                };
+
+     
+
+                for (const auto& filename : filenames) {
+                    std::vector<int> arrHibbard = readArrayFromFile(filename);
+                    std::vector<int> arrKnuth = arrHibbard;
+                    std::vector<int> arrSedgwick = arrHibbard;
+
+                    unsigned int totalTimeHibbard = 0, totalTimeKnuth = 0, totalTimeSedgwick = 0;
+                    for (int k = 0; k < 3; ++k) {
+                        
+
+                        // Измерение времени для Hibbard
+                        auto startHibbard = std::chrono::high_resolution_clock::now();
+                        shellSortWithHibbardGaps(arrHibbard);
+                        auto endHibbard = std::chrono::high_resolution_clock::now();
+                        totalTimeHibbard += std::chrono::duration_cast<std::chrono::microseconds>(endHibbard - startHibbard).count();
+
+                        // Измерение времени для Knuth
+                        auto startKnuth = std::chrono::high_resolution_clock::now();
+                        shellSortWithKnuthGaps(arrKnuth);
+                        auto endKnuth = std::chrono::high_resolution_clock::now();
+                        totalTimeKnuth += std::chrono::duration_cast<std::chrono::microseconds>(endKnuth - startKnuth).count();
+
+                        // Измерение времени для Sedgwick
+                        auto startSedgwick = std::chrono::high_resolution_clock::now();
+                        shellSortWithSedgwickGaps(arrSedgwick);
+                        auto endSedgwick = std::chrono::high_resolution_clock::now();
+                        totalTimeSedgwick += std::chrono::duration_cast<std::chrono::microseconds>(endSedgwick - startSedgwick).count();
+                    }
+
+                    unsigned int averageTimeHibbard = totalTimeHibbard / 3;
+                    unsigned int averageTimeKnuth = totalTimeKnuth / 3;
+                    unsigned int averageTimeSedgwick = totalTimeSedgwick / 3;
+
+                    std::cout << "Файл: " << filename << "\n";
+                    std::cout << "Среднее время работы Хиббард (в миллисекундах): " << averageTimeHibbard << "\n";
+                    std::cout << "Среднее время работы Кнут (в миллисекундах): " << averageTimeKnuth << "\n";
+                    std::cout << "Среднее время работы Сэджвик (в миллисекундах): " << averageTimeSedgwick << "\n";
+
+                    std::cout << "\n";
+                }
 
     _getch();
     return 0;
