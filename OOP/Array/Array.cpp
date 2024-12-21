@@ -1,293 +1,264 @@
 ﻿#include <iostream>
-#include "Array.h"
 #include <stdexcept>
-Array::Array(int size)
-{
-	if (size < 0)
-	{
-		size = -size;
-	}
-	m_size = size;
-	m_array = new int[m_size];
-	for (int i = 0; i < m_size; i++)
-	{
-		m_array[i] = 0;
-	}
+#include <algorithm>
+#include "Array.h" 
+template <typename T>
+Array<T>::Array(int size) : m_size(size) {
+    if (size <= 0) {
+        throw std::invalid_argument("Размер должен быть больше нуля.");
+    }
+    m_array = new T[m_size];
 }
 
-Array::~Array()
-{
-	delete[] m_array;
-}
-Array::Array(const Array& other)
-{
-	m_size = other.m_size;
-	m_array = new int[m_size];
-	for (int i = 0; i < m_size; i++)
-	{
-		m_array[i] = other.m_array[i];
-	}
+template <typename T>
+Array<T>::Array(const Array& other) : m_size(other.m_size) {
+    m_array = new T[m_size];
+    std::copy(other.m_array, other.m_array + m_size, m_array);
 }
 
-Array::Array(Array&& other) noexcept
-{
-	m_size = other.m_size;
-	m_array = other.m_array;
-
-	other.m_size = 0;
-	other.m_array = nullptr;
+template <typename T>
+Array<T>::Array(Array&& other) noexcept : m_array(other.m_array), m_size(other.m_size) {
+    other.m_array = nullptr;
+    other.m_size = 0;
 }
 
-
-
-int& Array::operator[](int index) {// возвращение элемента по его индекску
-	if (index < 0 && index >= m_size) {
-		std::cout << "index error< undex=0\n";
-		return m_array[0];
-	}
-	else {
-		return m_array[index];
-	}
-}
-const int& Array::operator[](int index) const
-{
-	if (index < 0 && index >= m_size) {
-		std::cout << "index error< undex=0\n";
-		return m_array[0];
-	}
-	else {
-		return m_array[index];
-	}
+template <typename T>
+Array<T>::~Array() {
+    delete[] m_array;
 }
 
-bool Array::insert(const int index, const int& value)
-{
-	if (index < 0 || index > m_size)
-	{
-		return false;
-	}
-
-	int* newArray = new int[m_size + 1];
-	for (int i = 0; i <= index; ++i)
-	{
-		newArray[i] = m_array[i];
-	}
-	newArray[index] = value;
-	for (int i = index + 1; i < m_size + 1; ++i)
-	{
-		newArray[i] = m_array[i - 1];
-	}
-
-	delete[] m_array;
-
-	m_array = newArray;
-	m_size++;
-
-	return true;
-}
-void Array::swap(Array& other) noexcept
-{
-	std::swap(m_size, other.m_size);
-	std::swap(m_array, other.m_array);
+template <typename T>
+bool Array<T>::insert(const int index, const T& value) {
+    if (index < 0 || index >= m_size) {
+        return false;
+    }
+    m_array[index] = value;
+    return true;
 }
 
-Array& Array::operator=(const Array& other)
-{
-	if (m_size == other.m_size)
-	{
-		for (int i = 0; i < m_size; ++i)
-		{
-			m_array[i] = other.m_array[i];
-		}
-	}
-	else
-	{
-		Array copy(other);
-		swap(copy);
-	}
-	return *this;
+template <typename T>
+void Array<T>::swap(Array& other) noexcept {
+    std::swap(m_array, other.m_array);
+    std::swap(m_size, other.m_size);
 }
 
-Array& Array::operator=(Array&& other) noexcept
-{
-	//std::cout << this << ": " << "Array::operator=(Array&& other) begin \n";
-	std::cout << "other: " << &other << " \n";
-	swap(other);
-	//std::cout << this << ": " << "Array::operator=(Array&& other) end \n";
-	return *this;
+template <typename T>
+int Array<T>::getSize() const {
+    return m_size;
 }
 
-
-Array Array::operator+(const Array& other) const
-{
-	Array result(m_size + other.m_size);
-	for (int i = 0; i < m_size; i++)
-	{
-		result[i] = m_array[i];
-	}
-	for (int i = 0; i < other.m_size; i++)
-	{
-		result[m_size + i] = other[i];
-	}
-	return result;
+template <typename T>
+void Array<T>::input() {
+    for (int i = 0; i < m_size; ++i) {
+        std::cout << "Введите элемент " << i << ": ";
+        std::cin >> m_array[i];
+    }
 }
 
-Array& Array::operator+=(const Array& other)
-{
-	operator+(other).swap(*this);
-	return *this;
+template <typename T>
+void Array<T>::output() const {
+    for (int i = 0; i < m_size; ++i) {
+        std::cout << m_array[i] << " ";
+    }
+    std::cout << std::endl;
 }
 
-int Array:: getSize() const
-{
-	return m_size;
+template <typename T>
+int Array<T>::find(const T& value) const {
+    for (int i = 0; i < m_size; ++i) {
+        if (m_array[i] == value) {
+            return i;
+        }
+    }
+    return -1; // Не найдено
 }
 
-void Array:: input() {
-	for (int i = 0; i < m_size; i++) {
-		std::cin >> m_array[i];
-	}
+template <typename T>
+void Array<T>::bubbleSort() {
+    for (int i = 0; i < m_size - 1; ++i) {
+        for (int j = 0; j < m_size - i - 1; ++j) {
+            if (m_array[j] > m_array[j + 1]) {
+                std::swap(m_array[j], m_array[j + 1]);
+            }
+        }
+    }
 }
 
-void Array::output() const {
-	for (int i = 0; i < m_size; i++) {
-		std::cout << m_array[i] << " ";
-	}
-	std::cout << '\n';
+template <typename T>
+bool Array<T>::deleteByIndex(int index) {
+    if (index < 0 || index >= m_size) {
+        return false;
+    }
+    for (int i = index; i < m_size - 1; ++i) {
+        m_array[i] = m_array[i + 1];
+    }
+    --m_size;
+    return true;
 }
 
-bool Array::operator==(const Array& other) const {
-	if (m_size != other.m_size) return false;
-
-	for (int i = 0; i < m_size; i++) {
-		if (m_array[i] != other.m_array[i]) return false;
-	}
-
-	return true;
+template <typename T>
+bool Array<T>::deleteByValue(const T& value) {
+    int index = find(value);
+    return deleteByIndex(index);
 }
 
-bool Array::operator!=(const Array& other) const {
-	return !(*this == other);
+template <typename T>
+void Array<T>::deleteAll(const T& value) {
+    for (int i = 0; i < m_size;) {
+        if (m_array[i] == value) {
+            deleteByIndex(i);
+        }
+        else {
+            ++i;
+        }
+    }
 }
 
-// Поиск элемента
-int Array::find(int value) const {
-	for (int i = 0; i < m_size; i++) {
-		if (m_array[i] == value) {
-			return i;
-		}
-	}
-	return -1; 
+template <typename T>
+T Array<T>::max() const {
+    if (m_size == 0) throw std::runtime_error("Массив пуст.");
+    return *std::max_element(m_array, m_array + m_size);
 }
 
-void Array::bubleSort() {
-	for (size_t i = 0; i < m_size - 1; i++) {
-		for (size_t j = 0; j < m_size - i - 1; j++) {
-			if (m_array[j] > m_array[j + 1]) {
-				std::swap(m_array[j], m_array[j + 1]);
-			}
-		}
-	}
+template <typename T>
+T Array<T>::min() const {
+    if (m_size == 0) throw std::runtime_error("Массив пуст.");
+    return *std::min_element(m_array, m_array + m_size);
 }
 
-bool Array::deleteByIndex(int index) {
-	if (index >= m_size || index < 0)
-	{
-		return false;
-	}
-	for (int i = index; i <= m_size - 1; i++) {
-		m_array[i] = m_array[i + 1];
-	}
-	m_size--;
-	return true;
+template <typename T>
+T* Array<T>::begin() {
+    return m_array;
 }
 
-// Удаление элемента по значению
-bool Array:: deleteByValue(int value) {
-	int index = find(value);
-	if (index == -1)
-	{
-		return false;
-	}
-	return deleteByIndex(index);
+template <typename T>
+const T* Array<T>::begin() const {
+    return m_array;
 }
 
-void Array::deleteAll(int value) {
-	while (true) {
-		int index = find(value);
-		if (index == -1)
-		{
-			break;
-		}
-		deleteByIndex(index);
-	}
+template <typename T>
+T* Array<T>::end() {
+    return m_array + m_size;
 }
 
-int Array::max() const {
-	if (m_size == 0) {
-		throw std::runtime_error("Массиы пустой");
-	}
-
-	int max = m_array[0];
-	for (int i = 1; i < m_size; i++) { 
-		if (m_array[i] > max) {
-			max = m_array[i];
-		}
-	}
-	return max;
+template <typename T>
+const T* Array<T>::end() const {
+    return m_array + m_size;
 }
 
-int Array::min() const {
-	if (m_size == 0) {
-		throw std::runtime_error("Массив пустой");
-	}
-
-	int min = m_array[0]; 
-	for (int i = 1; i < m_size; i++) {
-		if (m_array[i] < min) {
-			min = m_array[i];
-		}
-	}
-	return min;
+template <typename T>
+void Array<T>::addInEnd(const T& value) {
+    T* newArray = new T[m_size + 1];
+    std::copy(m_array, m_array + m_size, newArray);
+    newArray[m_size] = value;
+    delete[] m_array;
+    m_array = newArray;
+    ++m_size;
 }
 
-int* Array::begin() { 
-	return m_array;
-}
-const int* Array::begin() const { 
-	return m_array; 
-}
-
-int* Array::end() {
-	return m_array + m_size; 
-}
-const int* Array::end() const {
-	return m_array + m_size;
-}
-
-void Array::insertBefore(int* iterator, int value) {
-	int index = iterator - m_array;
-	insert(index, value);
+template <typename T>
+void Array<T>::insertBefore(T* iterator, const T& value) {
+    if (iterator < m_array || iterator >= m_array + m_size) {
+        throw std::out_of_range("Итератор выходит за пределы массива.");
+    }
+    T* newArray = new T[m_size + 1];
+    std::copy(m_array, iterator, newArray);
+    newArray[iterator - m_array] = value;
+    std::copy(iterator, m_array + m_size, newArray + (iterator - m_array + 1));
+    delete[] m_array;
+    m_array = newArray;
+    ++m_size;
 }
 
-void Array::deleteByIterator(int* iterator) {
-	int index = iterator - m_array;
-	deleteByIndex(index);
+template <typename T>
+void Array<T>::deleteByIterator(T* iterator) {
+    if (iterator < m_array || iterator >= m_array + m_size) {
+        throw std::out_of_range("Итератор выходит за пределы массива.");
+    }
+    int index = iterator - m_array;
+    T* newArray = new T[m_size - 1];
+    std::copy(m_array, m_array + index, newArray);
+    std::copy(m_array + index + 1, m_array + m_size, newArray + index);
+    delete[] m_array;
+    m_array = newArray;
+    --m_size;
 }
 
-bool Array:: deleteInterval(int* begin, int* end) {
-	if (begin == nullptr || end == nullptr || begin > end) {
-		return false;
-	}
-	int startIndex = begin - m_array;
-	int endIndex = end - m_array;
+template <typename T>
+bool Array<T>::deleteInterval(T* begin, T* end) {
+    if (begin < m_array || end >= m_array + m_size || begin > end) {
+        throw std::out_of_range("Указанные итераторы выходят за пределы массива.");
+    }
+    int countToDelete = end - begin + 1;
+    T* newArray = new T[m_size - countToDelete];
+    std::copy(m_array, begin, newArray);
+    std::copy(end + 1, m_array + m_size, newArray + (begin - m_array));
+    delete[] m_array;
+    m_array = newArray;
+    m_size -= countToDelete;
 
-	for (int i = startIndex; i <= endIndex; i++) {
-		deleteByIndex(i);
-	}
+    return true;
 }
 
+template <typename T>
+bool Array<T>::operator!=(const Array& other) const {
+    if (m_size != other.m_size) return true;
+    for (int i = 0; i < m_size; ++i) {
+        if (m_array[i] != other.m_array[i]) return true;
+    }
+    return false;
+}
 
-void Array::addInEnd(int value) {
-	insert(m_size, value);
-} 
+template <typename T>
+bool Array<T>::operator==(const Array& other) const {
+    return !(*this != other);
+}
+
+template <typename T>
+Array<T>& Array<T>::operator=(const Array& other) {
+    if (this != &other) {
+        delete[] m_array;
+        m_size = other.m_size;
+        m_array = new T[m_size];
+        std::copy(other.m_array, other.m_array + m_size, m_array);
+    }
+    return *this;
+}
+
+template <typename T>
+Array<T>& Array<T>::operator=(Array&& other) noexcept {
+    if (this != &other) {
+        delete[] m_array;
+        m_array = other.m_array;
+        m_size = other.m_size;
+        other.m_array = nullptr;
+        other.m_size = 0;
+    }
+    return *this;
+}
+
+template <typename T>
+T& Array<T>::operator[](int index) {
+    if (index < 0 || index >= m_size) throw std::out_of_range("Индекс выходит за пределы массива.");
+    return m_array[index];
+}
+
+template <typename T>
+const T& Array<T>::operator[](int index) const {
+    if (index < 0 || index >= m_size) throw std::out_of_range("Индекс выходит за пределы массива.");
+    return m_array[index];
+}
+
+template <typename T>
+Array<T> Array<T>::operator+(const Array& other) const {
+    Array result(m_size + other.m_size);
+    std::copy(m_array, m_array + m_size, result.m_array);
+    std::copy(other.m_array, other.m_array + other.m_size, result.m_array + m_size);
+    return result;
+}
+
+template <typename T>
+Array<T>& Array<T>::operator+=(const Array& other) {
+    *this = *this + other;
+    return *this;
+}

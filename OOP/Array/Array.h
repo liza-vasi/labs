@@ -7,52 +7,51 @@ template <typename T>
 class Array {
 public:
     Array(int size = 10);
-    Array(const Array& other);//копирование
-    Array(Array&& other)noexcept;//перемещение
-    ~Array();//деструктор
+    Array(const Array& other); // Копирование
+    Array(Array&& other) noexcept; // Перемещение
+    ~Array(); // Деструктор
 
-    bool insert(const int index, const int& value);//вставка ++
-    void swap(Array& other) noexcept;//функция свап  ++
+    bool insert(const int index, const T& value); // Вставка
+    void swap(Array& other) noexcept; // Функция свап
 
-    int getSize() const;//получение размера ++
-    void input();//ввод ++
-    void output() const;//вывод ++
+    int getSize() const; // Получение размера
+    void input(); // Ввод
+    void output() const; // Вывод
 
-    int find(int value) const;//поиск   ++
+    int find(const T& value) const; // Поиск
 
-    void bubleSort();//соритировка   ++
+    void bubbleSort(); // Сортировка
 
-    bool deleteByIndex(int index);//удаление по индексу ++
-    bool deleteByValue(int value);//удаление по значению ++
-    void deleteAll(int value);// удалить все элементы с таким значением ++
+    bool deleteByIndex(int index); // Удаление по индексу
+    bool deleteByValue(const T& value); // Удаление по значению
+    void deleteAll(const T& value); // Удалить все элементы с таким значением
 
-    int max() const;// максимальный элемент ++
-    int min() const;// минимальный элемент ++
+    T max() const; // Максимальный элемент
+    T min() const; // Минимальный элемент
 
-    int* begin();//итератор начала
-    const int* begin() const;// неизменяемый итератор начала
-    int* end();//итератор конца
-    const int* end() const;//неизменяемый итератор конц
+    T* begin(); // Итератор начала
+    const T* begin() const; // Неизменяемый итератор начала
+    T* end(); // Итератор конца
+    const T* end() const; // Неизменяемый итератор конца
 
-    void addInEnd(int value);
+    void addInEnd(const T& value);
 
-    void insertBefore(int* iterator, int value);//вставка перед итератором ++
-    void deleteByIterator(int* iterator);//удаление по итератору++
-    bool deleteInterval(int* begin, int* end);//удаление интервала ++
+    void insertBefore(T* iterator, const T& value); // Вставка перед итератором
+    void deleteByIterator(T* iterator); // Удаление по итератору
+    bool deleteInterval(T* begin, T* end); // Удаление интервала
 
+    bool operator!=(const Array& other) const; // Сравнение
+    bool operator==(const Array& other) const; // Сравнение
 
-    bool operator!=(const Array& other) const;//сравнение ++
-    bool operator==(const Array& other) const;//сравнение  ++
-
-    Array& operator=(const Array& other);//копирование ++
-    Array& operator=(Array&& other) noexcept;//перемещение
-    int& operator[](int index);//изменяемая ссылка, доступ к индексу
-    const int& operator[](int index) const;//неизменяемая поэтому const, тоже доступ к индексу
-    Array operator+(const Array& other) const;//сложение массивов
-    Array& operator+=(const Array& other);//сложение с присваиванием
+    Array& operator=(const Array& other); // Копирование
+    Array& operator=(Array&& other) noexcept; // Перемещение
+    T& operator[](int index); // Изменяемая ссылка, доступ к индексу
+    const T& operator[](int index) const; // Неизменяемая ссылка, доступ к индексу
+    Array operator+(const Array& other) const; // Сложение массивов
+    Array& operator+=(const Array& other); // Сложение с присваиванием
 
 private:
-    int* m_array = nullptr;//указатель на массив 
-    int m_size = 0;//размер массива
-    
+    T* m_array = nullptr; // Указатель на массив 
+    int m_size = 0; // Размер массива
 };
+
