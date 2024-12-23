@@ -20,6 +20,9 @@ int main() {
     Set unionSet = setA | setB;
     std::cout << "Объединение множеств A и B: " << unionSet << std::endl;
 
+    Set Set111 = setA / setB;
+    std::cout << "Разность множеств A и B: " << Set111 << std::endl;
+
     Set intersectionSet = setA & setB;
     std::cout << "Пересечение множеств A и B: " << intersectionSet << std::endl;
 
