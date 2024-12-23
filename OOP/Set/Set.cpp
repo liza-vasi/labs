@@ -97,6 +97,26 @@ Set Set::operator~() const {
     return result;
 }
 
+Set Set::operator/(const Set& other) const
+{
+    Set result(BoolVector::operator&(~other));
+    return result;
+}
+
+Set& Set::operator/=(const Set& other)
+{
+    operator/(other).swap(*this);
+    return *this;
+}
+//идея такова проходим по всем и есть есть в другом то удаляем из нашего если нет то можно оставить и в итоге возвращаем * this
+/*for (int i = MIN_CHAR; i < MAX_CHAR; ++i) {
+        if (other.contains(static_cast<char>(i))) {
+            m_remove(static_cast<char>(i)); 
+        }
+    }
+    return *this;*/
+
+
 std::ostream& operator<<(std::ostream& os, const Set& cs) {
     os << "{ ";
     for (int i = 0; i < Set::CHAR_RANGE; ++i) {

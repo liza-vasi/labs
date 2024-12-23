@@ -29,6 +29,11 @@ public:
     Set& operator&=(const Set& other); //  присваивание побитового И
     Set operator~() const; // инверсия 
 
+    Set operator/(const Set& other) const;
+    Set& operator/=(const Set& other);
+
+
+
     friend std::ostream& operator<<(std::ostream& os, const Set& cs); // вывод
     friend std::istream& operator>>(std::istream& is, Set& cs); //ввод
     
