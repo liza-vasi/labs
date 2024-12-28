@@ -204,3 +204,9 @@ std::istream& operator>>(std::istream& is, BoolMatrix& matrix) {
     }
     return is;
 }
+
+void BoolMatrix::setAll(bool value) {
+    for (size_t j = 0; j < rows; ++j) {
+        setRange(j, 0, value, cols);
+    }
+}

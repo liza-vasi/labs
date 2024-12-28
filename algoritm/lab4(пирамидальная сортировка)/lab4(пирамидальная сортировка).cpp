@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <numeric>
 
 bool isSorted(const std::vector<int>& arr) {
     for (int i = 1; i < arr.size(); i++) {
@@ -73,29 +74,49 @@ std::vector<int> readArrayFromFile(const std::string& filename) {
 
     return arr;
 }
-
 int main() {
     setlocale(LC_ALL, "Russian");
     const std::vector<std::string> filenames = {
         "исходный_массив_10000_-10_10.txt",
         "исходный_массив_10000_-1000_1000.txt",
-        "исходный_массив_100000_-10_10.txt"
+        "исходный_массив_10000_-100000_100000.txt",
+        "исходный_массив_100000_-10_10.txt",
+        "исходный_массив_100000_-1000_1000.txt",
+        "исходный_массив_100000_-100000_100000.txt",
+        "исходный_массив_1000000_-10_10.txt",
+        "исходный_массив_1000000_-1000_1000.txt",
+        "исходный_массив_1000000_-100000_100000.txt"
     };
 
-    for (int i = 0; i < filenames.size(); i++) { // Изменяем 3 на filenames.size()
-        auto arr = readArrayFromFile(filenames[i]); // Передаем отдельный элемент
+    for (const auto& filename : filenames) {
+        std::vector<long long> durations;
 
-        unsigned int start_time = clock(); // начальное время
-        heapSort(arr);
-        unsigned int end_time1 = clock(); // конечное время
-        int heapSortTime = (end_time1 - start_time); // в миллисекундах
-        std::cout << "Время работы (в миллисекундах): " << heapSortTime << "\n";
+        for (int i = 0; i < 3; i++) {
+            auto arr = readArrayFromFile(filename);
 
-        if (!isSorted(arr)) {
-            std::cerr << "Ошибка: массив не отсортирован!" << std::endl;
+            if (arr.empty()) {
+                std::cerr << "Ошибка: массив пуст!" << std::endl;
+
+            }
+
+            auto start_time = std::chrono::high_resolution_clock::now();
+            heapSort(arr);
+            auto end_time = std::chrono::high_resolution_clock::now();
+
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            std::cout << "  Время работы (в миллисекундах): " << duration << "\n";
+            durations.push_back(duration);
+            if (!isSorted(arr)) {
+                std::cerr << "Ошибка: массив не отсортирован!" << std::endl;
+            }
+            else {
+                std::cout << "  Массив успешно отсортирован." << std::endl;
+            }
         }
-    }
 
+        long long average_duration = std::accumulate(durations.begin(), durations.end(), 0LL) / durations.size();
+        std::cout << "  Среднее время работы для файла '" << filename << "' (в миллисекундах): " << average_duration << "\n";
+    }
     _getch();
     return 0;
 }

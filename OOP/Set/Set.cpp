@@ -90,10 +90,8 @@ Set& Set::operator&=(const Set& other) {
 }
 
 Set Set::operator~() const {
-    Set result;
-    for (int i = 0; i < CHAR_RANGE; ++i) {
-        result.setBit(i, !this->bitValue(i));
-    }
+    Set result(BoolVector::operator~());
+    
     return result;
 }
 
@@ -108,13 +106,7 @@ Set& Set::operator/=(const Set& other)
     operator/(other).swap(*this);
     return *this;
 }
-//идея такова проходим по всем и есть есть в другом то удаляем из нашего если нет то можно оставить и в итоге возвращаем * this
-/*for (int i = MIN_CHAR; i < MAX_CHAR; ++i) {
-        if (other.contains(static_cast<char>(i))) {
-            m_remove(static_cast<char>(i)); 
-        }
-    }
-    return *this;*/
+
 
 
 std::ostream& operator<<(std::ostream& os, const Set& cs) {

@@ -59,6 +59,7 @@ public:
     BoolVector& operator<<=(int count);
     // Побитовая инверсия (~)
     BoolVector operator~() const;
+    //friend bool operator==(other);
 private:
     // Вспомогательные методы
     int _excessRankCount() const;
@@ -68,6 +69,7 @@ private:
     Cell* m_cells = nullptr;// Массив ячеек
     int m_cellCount = 0;// Количество ячеек
     int m_length = 0;// Количество бит
+    
 };
 
 

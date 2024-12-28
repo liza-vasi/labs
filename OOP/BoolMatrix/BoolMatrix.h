@@ -1,6 +1,6 @@
 #pragma once
 #include "../BoolVector/BoolVector.h"
-
+#include <vector> 
 class BoolMatrix {
 private:
     std::vector<BoolVector> data;
@@ -50,7 +50,7 @@ public:
 
     // Установка в 0/1 k компонент j-ой строки, начиная с i-ой компоненты
     void setRange(size_t j, size_t i, bool value, size_t k);
-
+    void setAll(bool value);
     // Перегрузка оператора присваивания
     BoolMatrix& operator=(const BoolMatrix& other);
 

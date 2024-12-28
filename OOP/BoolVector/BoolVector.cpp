@@ -388,3 +388,17 @@ BoolVector BoolVector::operator~() const {
     return result;
 }
 
+/*bool operator==(const BoolVector& lhs, const BoolVector& rhs) {
+    
+    if (lhs.m_cellCount != rhs.m_cellCount) {
+        return false; 
+    }
+
+    for (size_t i = 0; i < lhs.m_cellCount; ++i) {
+        if (lhs.m_cells[i] != rhs.m_cells[i]) {
+            return false; 
+        }
+    }
+
+    return true; 
+}*/

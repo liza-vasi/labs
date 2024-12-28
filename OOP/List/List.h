@@ -413,16 +413,9 @@ void List<T>::remove_head() {
     if (isEmpty()) {
         throw std::runtime_error("List is empty");
     }
-    Node* toDelete = m_head;
-    m_head = m_head->next;
-    if (m_head != nullptr) {
-        m_head->prev = nullptr;
-    }
-    else {
-        m_tail = nullptr; // Если список стал пустым
-    }
-    delete toDelete;
-    m_size--;
+
+    Iterator it(m_head);
+    remove(it);
 }
 
 // Удаление из хвоста
@@ -431,14 +424,7 @@ void List<T>::remove_tail() {
     if (isEmpty()) {
         throw std::runtime_error("List is empty");
     }
-    Node* toDelete = m_tail;
-    m_tail = m_tail->prev;
-    if (m_tail != nullptr) {
-        m_tail->next = nullptr;
-    }
-    else {
-        m_head = nullptr; // Если список стал пустым
-    }
-    delete toDelete;
-    m_size--;
+
+    Iterator it(m_tail);
+    remove(it);
 }
