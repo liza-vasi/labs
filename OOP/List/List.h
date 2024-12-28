@@ -37,9 +37,9 @@ public:
     void push_head(const T& value); // ?????????? ???????? ? ??????
     void push_tail(const T& value); // ?????????? ???????? ? ?????
     void insert_after(iterator pos, const T& value); // ??????? ????? ?????????
-    void push_after(const T& key, const T& value); // Вставка после ключа
-    void remove_head(); // Удаление из головы
-    void remove_tail(); // Удаление из хвоста
+    void push_after(const T& key, const T& value); // Г‚Г±ГІГ ГўГЄГ  ГЇГ®Г±Г«ГҐ ГЄГ«ГѕГ·Г 
+    void remove_head(); // Г“Г¤Г Г«ГҐГ­ГЁГҐ ГЁГ§ ГЈГ®Г«Г®ГўГ»
+    void remove_tail(); // Г“Г¤Г Г«ГҐГ­ГЁГҐ ГЁГ§ ГµГўГ®Г±ГІГ 
     void remove(iterator pos); // ???????? ?? ?????????
     void remove(const T& key); // ???????? ?? ?????
     void remove_range(iterator first, iterator last); // ???????? ?????????
@@ -204,7 +204,7 @@ typename List<T>::iterator List<T>::find(const T& key) {
             return iterator(current);
         }
     }
-    return end(); // Если не найдено, возвращаем end()
+    return end(); // Г…Г±Г«ГЁ Г­ГҐ Г­Г Г©Г¤ГҐГ­Г®, ГўГ®Г§ГўГ°Г Г№Г ГҐГ¬ end()
 }
 
 template <typename T>
@@ -231,7 +231,7 @@ void List<T>::insert_after(iterator pos, const T& value) {
 template <typename T>
 void List<T>::remove(iterator pos) {
     if (pos.getNode() == m_head || pos.getNode() == m_tail) {
-        return; // Нельзя удалять фиктивные узлы
+        return; // ГЌГҐГ«ГјГ§Гї ГіГ¤Г Г«ГїГІГј ГґГЁГЄГІГЁГўГ­Г»ГҐ ГіГ§Г«Г»
     }
     Node* toDelete = pos.getNode();
 
@@ -247,7 +247,7 @@ void List<T>::remove(const T& key) {
     for (Node* current = m_head->next; current != m_tail; current = current->next) {
         if (current->value == key) {
             remove(iterator(current));
-            break; // Удаляем только первое вхождение
+            break; // Г“Г¤Г Г«ГїГҐГ¬ ГІГ®Г«ГјГЄГ® ГЇГҐГ°ГўГ®ГҐ ГўГµГ®Г¦Г¤ГҐГ­ГЁГҐ
         }
     }
 }
@@ -308,14 +308,14 @@ void List<T>::sort() {
     }
 
     std::sort(values.begin(), values.end());
-    clear(); // Очищаем текущий список
+    clear(); // ГЋГ·ГЁГ№Г ГҐГ¬ ГІГҐГЄГіГ№ГЁГ© Г±ГЇГЁГ±Г®ГЄ
 
     for (const auto& value : values) {
         append(value);
     }
 }
 
-// Перегрузка операторов
+// ГЏГҐГ°ГҐГЈГ°ГіГ§ГЄГ  Г®ГЇГҐГ°Г ГІГ®Г°Г®Гў
 template <typename T>
 List<T>& List<T>::operator=(const List& other) {
     if (this != &other) {
@@ -385,7 +385,7 @@ List<T>& List<T>::operator+=(const List& other) {
     return *this;
 }
 
-// Вставка после ключа
+// Г‚Г±ГІГ ГўГЄГ  ГЇГ®Г±Г«ГҐ ГЄГ«ГѕГ·Г 
 template <typename T>
 void List<T>::push_after(const T& key, const T& value) {
     Node* current = m_head;
@@ -396,7 +396,7 @@ void List<T>::push_after(const T& key, const T& value) {
                 current->next->prev = newNode;
             }
             else {
-                m_tail = newNode; // если вставляем в конец, обновляем m_tail
+                m_tail = newNode; // ГҐГ±Г«ГЁ ГўГ±ГІГ ГўГ«ГїГҐГ¬ Гў ГЄГ®Г­ГҐГ¶, Г®ГЎГ­Г®ГўГ«ГїГҐГ¬ m_tail
             }
             current->next = newNode;
             m_size++;
@@ -407,7 +407,7 @@ void List<T>::push_after(const T& key, const T& value) {
     throw std::runtime_error("Key not found");
 }
 
-// Удаление из головы
+// Г“Г¤Г Г«ГҐГ­ГЁГҐ ГЁГ§ ГЈГ®Г«Г®ГўГ»
 template <typename T>
 void List<T>::remove_head() {
     if (isEmpty()) {
@@ -418,7 +418,6 @@ void List<T>::remove_head() {
     remove(it);
 }
 
-// Удаление из хвоста
 template <typename T>
 void List<T>::remove_tail() {
     if (isEmpty()) {
